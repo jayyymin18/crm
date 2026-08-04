@@ -3,7 +3,7 @@ import crm from "../channels/crm";
 import { brief, drainAll, taskAuth } from "../lib/dispatch";
 
 export default defineSchedule({
-	cron: "* * * * *",
+	cron: "0 6 * * *",
 	async run({ receive, waitUntil, appAuth }) {
 		waitUntil(
 			drainAll((task) =>
