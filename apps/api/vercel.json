@@ -1,0 +1,8 @@
+{
+	"rewrites": [
+		{ "source": "/(.*)", "destination": "/api/index" }
+	],
+	"crons": [
+		{ "path": "/internal/sync/google", "schedule": "0 6 * * *" }
+	]
+}
