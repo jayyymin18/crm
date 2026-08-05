@@ -52,9 +52,12 @@ export const auth = betterAuth({
 	session: {
 		expiresIn: 60 * 60 * 24 * 7,
 		updateAge: 60 * 60 * 24,
+		// Temporarily disabled while diagnosing a session cookie that stops
+		// validating within a second of being set on Vercel — this removes the
+		// separate encrypted/possibly-chunked session_data cookie from the
+		// picture, leaving only the plain DB-backed session_token cookie.
 		cookieCache: {
-			enabled: true,
-			maxAge: 5 * 60,
+			enabled: false,
 		},
 	},
 
