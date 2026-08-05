@@ -4,6 +4,7 @@ import { type BetterAuthOptions, betterAuth } from "better-auth";
 import { prismaAdapter } from "better-auth/adapters/prisma";
 import { APIError } from "better-auth/api";
 import { organization } from "better-auth/plugins/organization";
+import { createHash } from "node:crypto";
 import { AUTH_COOKIE_PREFIX } from "./cookies";
 import { env } from "./env";
 import { ensureWorkspaceMembership } from "./organization";
@@ -14,6 +15,20 @@ import {
 	isWorkspaceEmail,
 	primaryWorkspaceDomain,
 } from "./workspace";
+
+// Temporary: prints which deployment loaded this module and a short,
+// irreversible hash of BETTER_AUTH_SECRET, so a secret mismatch between
+// crm-app and crm-api (which each load their own copy of this module) shows
+// up directly in each project's Vercel logs instead of being guessed at.
+const secretHash = process.env.BETTER_AUTH_SECRET
+	? createHash("sha256")
+			.update(process.env.BETTER_AUTH_SECRET)
+			.digest("hex")
+			.slice(0, 12)
+	: "MISSING";
+console.log(
+	`[auth-secret-check] deployment=${process.env.VERCEL_URL ?? "unknown"} secretHash=${secretHash}`,
+);
 
 const socialProviders: NonNullable<BetterAuthOptions["socialProviders"]> = {};
 
