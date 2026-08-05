@@ -1,5 +1,4 @@
 import "reflect-metadata";
-import "express";
 import type { IncomingMessage, ServerResponse } from "node:http";
 import { createApp } from "../src/create-app";
 
