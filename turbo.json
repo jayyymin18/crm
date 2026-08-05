@@ -19,6 +19,12 @@
 	 * the separately-declared public copy — so they must not become part of the
 	 * cache key. A secret in the cache key means a cache miss every rotation and
 	 * a secret in the cache metadata.
+	 *
+	 * Vercel's own build-container env injection is gated on this list (and
+	 * `globalEnv`) alone — a task's `env: [...]` entry only affects that task's
+	 * cache-key hash, it does not make Vercel pass the variable through in the
+	 * first place. `API_URL` and `APP_URL` have to be declared here too, or the
+	 * build never sees them regardless of what `tasks.build.env` says.
 	 */
 	"globalPassThroughEnv": [
 		"DATABASE_URL",
@@ -41,7 +47,10 @@
 		"AI_GATEWAY_API_KEY",
 		"VERCEL_OIDC_TOKEN",
 		"AGENT_URL",
-		"AGENT_BRIDGE_SECRET"
+		"AGENT_BRIDGE_SECRET",
+		"API_URL",
+		"APP_URL",
+		"NEXT_PUBLIC_API_URL"
 	],
 
 	"tasks": {
